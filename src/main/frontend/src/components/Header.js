@@ -19,13 +19,13 @@ const Header = () => {
       <AppBar position='static'>
         <Toolbar>
           <Typography variant='h6' component='div' sx={{flexGrow: 1}}
-                      onClick={() => navi('/')} style={{cursor: 'pointer'}}
+                      onClick={() => navi('/app/')} style={{cursor: 'pointer'}}
           >
             Home
           </Typography>
           <Button
               color='inherit'
-              onClick={() => navi('/board-list')}>
+              onClick={() => navi('/app/board-list')}>
             게시판
           </Button>
           {isLogin ? 
@@ -33,7 +33,7 @@ const Header = () => {
               <>
                 <Button
                     color='inherit'
-                    onClick={() => navi('/mypage')}
+                    onClick={() => navi('/app/mypage')}
                 >마이페이지</Button>
                 <Button
                     color='inherit'
@@ -45,11 +45,11 @@ const Header = () => {
               <>
                 <Button
                     color='inherit'
-                    onClick={() => navi('/join')}
+                    onClick={() => navi('/app/join')}
                 >회원가입</Button>
                 <Button
                     color='inherit'
-                    onClick={() => navi('/login')}
+                    onClick={() => navi('/app/login')}
                 >로그인</Button>
               </>
             )

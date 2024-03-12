@@ -87,7 +87,7 @@ const BoardListTable = () => {
             <Button
                 type='button'
                 color='primary'
-                onClick={() => navi('/post')}>
+                onClick={() => navi('/app/post')}>
                 글 등록
             </Button>
         </Container>
