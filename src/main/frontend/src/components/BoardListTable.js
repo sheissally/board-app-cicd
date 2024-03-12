@@ -65,7 +65,7 @@ const BoardListTable = () => {
                                     <TableCell>{board.boardNo}</TableCell>
                                     <TableCell>
                                         <Link
-                                            to={`/board/${board.boardNo}`}
+                                            to={`/app/board/${board.boardNo}`}
                                         >{board.boardTitle}</Link>
                                     </TableCell>
                                     <TableCell>{board.boardWriter}</TableCell>
