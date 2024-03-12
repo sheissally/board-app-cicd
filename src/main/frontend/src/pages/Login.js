@@ -25,7 +25,7 @@ const Login = () => {
         e.preventDefault();
 
         dispatch(login(form));
-        navi("/");
+        navi("/app//");
     }, [form, dispatch]);
 
   return (

@@ -143,7 +143,7 @@ const Post = () => {
 
         dispatch(postBoard(sendFormData));
 
-        navi("/board-list");
+        navi("/app//board-list");
     }, [dispatch, navi, uploadFiles]);
   return (
     <Container maxWidth='md' style={{marginTop: '3%', textAlign: 'center'}}>
