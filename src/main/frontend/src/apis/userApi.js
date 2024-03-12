@@ -6,7 +6,7 @@ export const join = createAsyncThunk(
     async (user, thunkAPI) => {
         try {
             const response = await axios.post(
-                `http://localhost:9090/user/join`,
+                `/user/join`,
                 user
             );
 
@@ -22,7 +22,7 @@ export const login = createAsyncThunk(
     async (user, thunkAPI) => {
         try {
             const response = await axios.post(
-                `http://localhost:9090/user/login`,
+                `/user/login`,
                 user
             );
 
@@ -38,7 +38,7 @@ export const logout = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
             const response = await axios.get(
-                `http://localhost:9090/user/logout`,
+                `/user/logout`,
                 {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem("ACCESS_TOKEN")}`

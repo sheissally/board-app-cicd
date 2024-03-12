@@ -20,7 +20,7 @@ const Board = () => {
     const getBoard = useCallback(async () => {
         try {
             const response = await axios.get(
-                `http://localhost:9090/board/board/${boardNo}`,
+                `/board/board/${boardNo}`,
                 {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem("ACCESS_TOKEN")}`
@@ -218,7 +218,7 @@ const Board = () => {
     const modify = useCallback(async (formData) => {
         try {
             const response = await axios.put(
-                `http://localhost:9090/board/board`,
+                `/board/board`,
                 formData,
                 {
                     headers: {

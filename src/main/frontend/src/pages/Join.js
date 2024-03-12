@@ -71,7 +71,7 @@ const Join = () => {
 
         try {
             const response = await axios.post(
-                `http://localhost:9090/user/id-check`,
+                `/user/id-check`,
                 {
                     userId: form.userId
                 }

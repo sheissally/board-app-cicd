@@ -6,7 +6,7 @@ export const getBoards = createAsyncThunk(
     async (search, thunkAPI) => {
         try {
             const response = await axios.get(
-                `http://localhost:9090/board/board-list`,
+                `/board/board-list`,
                 {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem("ACCESS_TOKEN")}`
@@ -31,7 +31,7 @@ export const postBoard = createAsyncThunk(
     async (board, thunkAPI) => {
         try {
             const response = await axios.post(
-                `http://localhost:9090/board/board`,
+                `/board/board`,
                 board,
                 {
                     headers: {
@@ -54,7 +54,7 @@ export const removeBoard = createAsyncThunk(
     async (boardNo, thunkAPI) => {
         try {
             const response = await axios.delete(
-                `http://localhost:9090/board/board/${boardNo}`,
+                `/board/board/${boardNo}`,
                 {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem("ACCESS_TOKEN")}`
