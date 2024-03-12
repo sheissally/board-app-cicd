@@ -11,7 +11,7 @@ const Header = () => {
 
   const handleLogout = useCallback(() => {
     dispatch(logout());
-    navi("/app//login");
+    navi("/app/login");
   }, [dispatch, navi]);
 
   return (
