@@ -1,14 +1,32 @@
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, Container, TableBody, Button, Pagination } from '@mui/material';
+import {
+    TableContainer,
+    Paper,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    Container,
+    TableBody,
+    Button,
+    Pagination } from '@mui/material';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBoards } from '../apis/boardApi';
 import { Link, useNavigate } from 'react-router-dom';
 
 const BoardListTable = () => {
-    const boards = useSelector(state => state.boards.boards);
-    const searchCondtion = useSelector(state => state.boards.searchCondition);
-    const searchKeyword = useSelector(state => state.boards.searchKeyword);
-    const page = useSelector(state => state.boards.page);
+    const boards = useSelector(
+        state => state.boards.boards
+    );
+    const searchCondtion = useSelector(
+        state => state.boards.searchCondition
+    );
+    const searchKeyword = useSelector(
+        state => state.boards.searchKeyword
+    );
+    const page = useSelector(
+        state => state.boards.page
+    );
     const dispatch = useDispatch();
     const navi = useNavigate();
 
@@ -22,12 +40,14 @@ const BoardListTable = () => {
             searchKeyword: searchKeyword,
             page: parseInt(v) - 1
         }));
-    }, [searchCondtion, searchKeyword]);
+    }, [searchCondtion, searchKeyword, dispatch]);
 
   return (
     <>
         <Container maxWidth='xl'>
-            <TableContainer component={Paper} style={{marginTop: '3%'}}>
+            <TableContainer
+                component={Paper}
+                style={{marginTop: '3%'}}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -44,7 +64,9 @@ const BoardListTable = () => {
                                 <TableRow key={index}>
                                     <TableCell>{board.boardNo}</TableCell>
                                     <TableCell>
-                                        <Link to={`/board/${board.boardNo}`}>{board.boardTitle}</Link>
+                                        <Link
+                                            to={`/board/${board.boardNo}`}
+                                        >{board.boardTitle}</Link>
                                     </TableCell>
                                     <TableCell>{board.boardWriter}</TableCell>
                                     <TableCell>{board.boardRegdate}</TableCell>
@@ -57,14 +79,31 @@ const BoardListTable = () => {
         </Container>
         <Container 
             maxWidth="xl" 
-            style={{marginTop: '1%', display: 'flex', justifyContent: 'right'}}>
-            <Button type='button' color='primary' onClick={() => navi('/post')}>글 등록</Button>
+            style={{
+                marginTop: '1%',
+                display: 'flex',
+                justifyContent: 'right'
+            }}>
+            <Button
+                type='button'
+                color='primary'
+                onClick={() => navi('/post')}>
+                글 등록
+            </Button>
         </Container>
         <Container
             maxWidth="xl"
-            style={{marginTop: '1%', marginBottom: '1%',
-                     display: 'flex', justifyContent: 'center'}}>
-            {boards && <Pagination count={boards.totalPages} page={page + 1} onChange={changePage}></Pagination>}
+            style={{
+                marginTop: '1%',
+                marginBottom: '1%',
+                display: 'flex',
+                justifyContent: 'center'}}>
+            {boards &&
+                <Pagination
+                    count={boards.totalPages}
+                    page={page + 1}
+                    onChange={changePage}>
+                </Pagination>}
         </Container>
     </>
   );

@@ -1,4 +1,10 @@
-import { Button, Container, Grid, NativeSelect, TextField } from '@mui/material';
+import {
+    Button,
+    Container,
+    Grid,
+    NativeSelect,
+    TextField
+} from '@mui/material';
 import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { 
@@ -25,7 +31,11 @@ const SearchBar = () => {
 
         dispatch(
             getBoards(
-                {searchCondition: searchCondition, searchKeyword: searchKeyword, page: 0}
+                {
+                    searchCondition: searchCondition,
+                    searchKeyword: searchKeyword,
+                    page: 0
+                }
             )
         );
     }, [dispatch, searchCondition, searchKeyword]);
