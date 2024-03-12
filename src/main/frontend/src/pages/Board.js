@@ -3,19 +3,18 @@ import { Button, Container, Grid, TextField, Typography } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeBoard } from '../apis/boardApi';
+import { deleteBoard } from '../apis/boardApi';
 
 const Board = () => {
     const [board, setBoard] = useState(null);
     const {boardNo} = useParams();
     const loginUserId = useSelector(state => state.boards.loginUserId);
+    const dispatch = useDispatch();
+    const navi = useNavigate();
 
     let uploadFiles = [];
     let changeFiles = [];
     let originFiles = [];
-
-    const dispatch = useDispatch();
-    const navi = useNavigate();
 
     const getBoard = useCallback(async () => {
         try {
@@ -23,8 +22,7 @@ const Board = () => {
                 `/board/board/${boardNo}`,
                 {
                     headers: {
-                        Authorization:
-                            `Bearer ${sessionStorage.getItem("ACCESS_TOKEN")}`
+                        Authorization: `Bearer ${sessionStorage.getItem("ACCESS_TOKEN")}`
                     }
                 }
             );
@@ -73,13 +71,13 @@ const Board = () => {
 
         changeFiles.push(changeFile);
 
-        originFiles = originFiles.map((originFile) => 
+        originFiles = originFiles.map((originFile) =>
             originFile.boardFileNo === boardFileNo ? {
-                ...originFile,
-                boardFileStatus: "U",
-                newFileName: changeFile.name
-            } :
-            originFile
+                    ...originFile,
+                    boardFileStatus: "U",
+                    newFileName: changeFile.name
+                } :
+                originFile
         );
 
         const reader = new FileReader();
@@ -106,7 +104,7 @@ const Board = () => {
             imageLoader(file);
             uploadFiles.push(file);
         });
-    }, [imageLoader, uploadFiles]);
+    }, []);
 
     // 미리보기 처리 메소드
     // 미리보기될 파일은 업로드가 되어있는 상태가 아니기 때문에
@@ -119,17 +117,10 @@ const Board = () => {
         reader.onload = (e) => {
             // 이미지 표출할 img 태그 생성
             let img = document.createElement("img");
-            img.setAttribute(
-                "style",
-                "width: 100%; height: 100%; z-index: none;"
-            );
+            img.setAttribute("style", "width: 100%; height: 100%; z-index: none;");
 
             // 이미지 파일인지 아닌지 판단
-            if(file.name
-                .toLowerCase()
-                .match(
-                    /(.*?)\.(jpg|jpeg|png|gif|svg|bmp)$/)
-            ) {
+            if(file.name.toLowerCase().match(/(.*?)\.(jpg|jpeg|png|gif|svg|bmp)$/)) {
                 img.src = e.target.result;
             } else {
                 img.src = "/images/defaultFileImg.png";
@@ -149,11 +140,8 @@ const Board = () => {
         // div 태그 생성
         let div = document.createElement("div");
 
-        div.setAttribute(
-            "style",
-            "display: inline-block; position: relative;" +
-            " width: 150px; height: 120px; margin: 5px;" +
-            "border: 1px solid #00f; z-index: 1;");
+        div.setAttribute("style", "display: inline-block; position: relative;" +
+            " width: 150px; height: 120px; margin: 5px; border: 1px solid #00f; z-index: 1;");
 
         // 잘못 올렸을 때 삭제할 수 있는 삭제 버튼 생성
         let btn = document.createElement("input");
@@ -161,11 +149,8 @@ const Board = () => {
         btn.setAttribute("value", "x");
         // 사용자 정의 속성 추가
         btn.setAttribute("deleteFile", file.name);
-        btn.setAttribute(
-            "style",
-            "width: 30px; height: 30px; position: absolute;" +
-            " right: 0; bottom: 0; z-index: 999;" +
-            " background-color: rgba(255, 255, 255, 0.1);" +
+        btn.setAttribute("style", "width: 30px; height: 30px; position: absolute;" +
+            " right: 0; bottom: 0; z-index: 999; background-color: rgba(255, 255, 255, 0.1);" +
             " color: #f00;");
 
         // 위에서 생성한 버튼 클릭했을 때 파일 삭제되는 기능 구현
@@ -203,10 +188,7 @@ const Board = () => {
 
         // 파일 명을 표출할 p 태그 생성
         let fileNameP = document.createElement("p");
-        fileNameP.setAttribute(
-            "style",
-            "display: inline-block; font-size: 8px;"
-        );
+        fileNameP.setAttribute("style", "display: inline-block; font-size: 8px;");
         fileNameP.textContent = file.name;
 
         // div 태그에 img, button, p태그 추가
@@ -218,13 +200,13 @@ const Board = () => {
     }
 
     const deleteImg = (e, boardFileNo) => {
-        originFiles = originFiles.map((originFile) => 
+        originFiles = originFiles.map((originFile) =>
             originFile.boardFileNo === boardFileNo ?
-            {
-                ...originFile,
-                boardFileStatus: "D"
-            } :
-            originFile
+                {
+                    ...originFile,
+                    boardFileStatus: "D"
+                } :
+                originFile
         );
 
         const ele = e.target;
@@ -239,13 +221,12 @@ const Board = () => {
                 formData,
                 {
                     headers: {
-                        Authorization:
-                            `Bearer ${sessionStorage.getItem("ACCESS_TOKEN")}`,
+                        Authorization: `Bearer ${sessionStorage.getItem("ACCESS_TOKEN")}`,
                         "Content-Type": "multipart/form-data"
                     }
                 }
             );
-            
+
             if(response.data && response.data.item) {
                 alert("정상적으로 수정되었습니다.");
                 window.location.reload();
@@ -254,7 +235,7 @@ const Board = () => {
             alert("에러 발생.");
             console.log(e);
         }
-    }, [navi]);
+    }, []);
 
     const handleModify = useCallback((e) => {
         e.preventDefault();
@@ -263,9 +244,7 @@ const Board = () => {
 
         const formDataObj = {};
 
-        formData.forEach(
-            (value, key) => formDataObj[key] = value
-        );
+        formData.forEach((value, key) => formDataObj[key] = value);
 
         const sendFormData = new FormData();
 
@@ -290,297 +269,234 @@ const Board = () => {
         sendFormData.append("originFiles", JSON.stringify(originFiles));
 
         modify(sendFormData);
-    }, [board, originFiles, changeFiles, uploadFiles, modify()]);
+    }, [board, originFiles, changeFiles, uploadFiles]);
 
     const remove = useCallback((boardNo) => {
-        dispatch(removeBoard(boardNo));
-        navi("/app//board-list");
+        dispatch(deleteBoard(boardNo));
+        navi("/app/board-list");
     }, [dispatch, navi]);
-  return (
-    <Container maxWidth='md' style={{
-        marginTop: '3%',
-        textAlign: 'center'
-    }}>
-        <Grid container>
-            <Grid item xs={12}>
-                <Typography component='h1' variant='h5'>
-                    게시글
-                </Typography>
-            </Grid>
-        </Grid>
-        <form onSubmit={handleModify}>
-            {board != null &&
-                <input
-                    type='hidden'
-                    name='boardNo'
-                    id='boardNo'
-                    value={board.boardNo}>
-                </input>}
-            <Grid container style={{
-                marginTop: '3%',
-                textAlign: 'center'}}
-            >
-                <Grid 
-                    item 
-                    xs={2}
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'}}
-                >
-                    <Typography component='p' variant='string'>
-                        제목
+    return (
+        <Container maxWidth='md' style={{marginTop: '3%', textAlign: 'center'}}>
+            <Grid container>
+                <Grid item xs={12}>
+                    <Typography component='h1' variant='h5'>
+                        게시글
                     </Typography>
-                </Grid>
-                <Grid
-                    item
-                    xs={10}
-                >
-                    <TextField
-                        name='boardTitle'
-                        id='boardTitle'
-                        fullWidth
-                        size='small'
-                        value={board !== null ? board.boardTitle : ''}
-                        aria-readonly={
-                            board !== null &&
-                            loginUserId !== board.boardWriter ? 'true' : 'false'
-                        }
-                        onChange={textFieldChange}
-                    ></TextField>
                 </Grid>
             </Grid>
-            <Grid container style={{marginTop: '3%', textAlign: 'center'}}>
-                <Grid 
-                    item 
-                    xs={2}
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'}}
-                >
-                    <Typography component='p' variant='string'>
-                        작성자
-                    </Typography>
+            <form onSubmit={handleModify}>
+                {board != null && <input type='hidden' name='boardNo' value={board.boardNo}></input>}
+                <Grid container style={{marginTop: '3%', textAlign: 'center'}}>
+                    <Grid
+                        item
+                        xs={2}
+                        style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                    >
+                        <Typography component='p' variant='string'>
+                            제목
+                        </Typography>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={10}
+                    >
+                        <TextField
+                            name='boardTitle'
+                            id='boardTitle'
+                            fullWidth
+                            size='small'
+                            value={board != null ? board.boardTitle : ''}
+                            aria-readonly={board != null && loginUserId != board.boardWriter ? 'true' : 'false'}
+                            onChange={textFieldChange}
+                        ></TextField>
+                    </Grid>
                 </Grid>
-                <Grid
-                    item
-                    xs={10}
-                >
-                    <TextField
-                        name='boardWriter'
-                        id='boardWriter'
-                        fullWidth
-                        size='small'
-                        value={board !== null ? board.boardWriter : ''}
-                    ></TextField>
+                <Grid container style={{marginTop: '3%', textAlign: 'center'}}>
+                    <Grid
+                        item
+                        xs={2}
+                        style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                    >
+                        <Typography component='p' variant='string'>
+                            작성자
+                        </Typography>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={10}
+                    >
+                        <TextField
+                            name='boardWriter'
+                            id='boardWriter'
+                            fullWidth
+                            size='small'
+                            value={board != null ? board.boardWriter : ''}
+                        ></TextField>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Grid container style={{marginTop: '3%', textAlign: 'center'}}>
-                <Grid 
-                    item 
-                    xs={2}
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'}}
-                >
-                    <Typography component='p' variant='string'>
-                        내용
-                    </Typography>
+                <Grid container style={{marginTop: '3%', textAlign: 'center'}}>
+                    <Grid
+                        item
+                        xs={2}
+                        style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                    >
+                        <Typography component='p' variant='string'>
+                            내용
+                        </Typography>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={10}
+                    >
+                        <TextField
+                            name='boardContent'
+                            id='boardContent'
+                            fullWidth
+                            size='small'
+                            multiline
+                            rows={10}
+                            value={board != null ? board.boardContent : ''}
+                            aria-readonly={board != null && loginUserId != board.boardWriter ? 'true' : 'false'}
+                            onChange={textFieldChange}
+                        ></TextField>
+                    </Grid>
                 </Grid>
-                <Grid
-                    item
-                    xs={10}
-                >
-                    <TextField
-                        name='boardContent'
-                        id='boardContent'
-                        fullWidth
-                        size='small'
-                        multiline
-                        rows={10}
-                        value={board != null ? board.boardContent : ''}
-                        aria-readonly={
-                            board !== null &&
-                            loginUserId != board.boardWriter ? 'true' : 'false'
-                        }
-                        onChange={textFieldChange}
-                    ></TextField>
+                <Grid container style={{marginTop: '3%', textAlign: 'center'}}>
+                    <Grid
+                        item
+                        xs={2}
+                        style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                    >
+                        <Typography component='p' variant='string'>
+                            작성일
+                        </Typography>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={10}
+                    >
+                        <TextField
+                            name='boardRegdate'
+                            id='boardRegdate'
+                            fullWidth
+                            size='small'
+                            value={board != null ? board.boardRegdate : ''}
+                        ></TextField>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Grid container style={{marginTop: '3%', textAlign: 'center'}}>
-                <Grid 
-                    item 
-                    xs={2}
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'}}
-                >
-                    <Typography component='p' variant='string'>
-                        작성일
-                    </Typography>
+                <Grid container style={{marginTop: '3%', textAlign: 'center'}}>
+                    <Grid
+                        item
+                        xs={2}
+                        style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                    >
+                        <Typography component='p' variant='string'>
+                            조회수
+                        </Typography>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={10}
+                    >
+                        <TextField
+                            name='boardCnt'
+                            id='boardCnt'
+                            fullWidth
+                            size='small'
+                            value={board != null ? board.boardCnt : ''}
+                        ></TextField>
+                    </Grid>
                 </Grid>
-                <Grid
-                    item
-                    xs={10}
-                >
-                    <TextField
-                        name='boardRegdate'
-                        id='boardRegdate'
-                        fullWidth
-                        size='small'
-                        value={board !== null ? board.boardRegdate : ''}
-                    ></TextField>
+                <Grid container style={{marginTop: '3%', textAlign: 'center'}}>
+                    <Grid
+                        item
+                        xs={2}
+                        style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                    >
+                        <Typography component='p' variant='string'>
+                            파일첨부
+                        </Typography>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={10}
+                    >
+                        <Button type='button' variant='outlined' onClick={openFileInput}>파일 선택</Button>
+                        <input
+                            type='file'
+                            multiple
+                            name='uploadFiles'
+                            id='uploadFiles'
+                            style={{display: 'none'}}
+                            onChange={addFiles}></input>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Grid container style={{marginTop: '3%', textAlign: 'center'}}>
-                <Grid 
-                    item 
-                    xs={2}
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}
-                >
-                    <Typography component='p' variant='string'>
-                        조회수
-                    </Typography>
-                </Grid>
-                <Grid
-                    item
-                    xs={10}
-                >
-                    <TextField
-                        name='boardCnt'
-                        id='boardCnt'
-                        fullWidth
-                        size='small'
-                        value={board !== null ? board.boardCnt : ''}
-                    ></TextField>
-                </Grid>
-            </Grid>
-            <Grid container style={{marginTop: '3%', textAlign: 'center'}}>
-                <Grid 
-                    item 
-                    xs={2}
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}
-                >
-                    <Typography component='p' variant='string'>
-                        파일첨부
-                    </Typography>
-                </Grid>
-                <Grid
-                    item
-                    xs={10}
-                >
-                    <Button type='button' variant='outlined' onClick={openFileInput}>파일 선택</Button>
-                    <input 
-                        type='file' 
-                        multiple 
-                        name='uploadFiles' 
-                        id='uploadFiles'
-                        style={{display: 'none'}}
-                        onChange={addFiles}></input>
-                </Grid>
-            </Grid>
-            <Grid container style={{
-                marginTop: '3%',
-                textAlign: 'center'
-            }}>
-                <Grid 
-                    item 
-                    xs={2}
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}
-                >
-                    <Typography component='p' variant='string'>
-                        미리보기
-                    </Typography>
-                </Grid>
-                <Grid
-                    item
-                    xs={10}
-                >
-                    <Typography component='p' variant='string'>
-                        파일을 변경하려면 사진을 클릭하시고 추가하려면 파일첨부 버튼을 클릭하세요.
-                    </Typography>
-                    <Container
-                        component='div'
-                        name='preview'
-                        id='preview'>
-                        {board != null && board.boardFileDTOList.map((boardFile, index) => (
-                            <div key={index}
-                                 style={{
-                                    display: 'inline-block',
-                                    position: 'relative',
-                                    width: '150px',
-                                    height: '120px',
-                                    margin: '5px',
-                                    border: '1px solid #00f',
-                                    zIndex: 1
-                                }}
-                            >
-                                <input type='file'
-                                       style={{display: 'none'}}
-                                       id={`changeFile${boardFile.boardFileNo}`}
-                                       onChange={(e) => changeBoardFile(e, boardFile.boardFileNo)}
-                                ></input>
-                                <img 
-                                    style={{
-                                        width: '100%', 
-                                        height: '100%', 
-                                        zIndex: 'none',
+                <Grid container style={{marginTop: '3%', textAlign: 'center'}}>
+                    <Grid
+                        item
+                        xs={2}
+                        style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+                    >
+                        <Typography component='p' variant='string'>
+                            미리보기
+                        </Typography>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={10}
+                    >
+                        <Typography component='p' variant='string'>
+                            파일을 변경하려면 사진을 클릭하시고 추가하려면 파일첨부 버튼을 클릭하세요.
+                        </Typography>
+                        <Container
+                            component='div'
+                            name='preview'
+                            id='preview'>
+                            {board != null && board.boardFileDTOList.map((boardFile, index) => (
+                                <div key={index} style={{
+                                    display: 'inline-block', position: 'relative', width: '150px',
+                                    height: '120px', margin: '5px', border: '1px solid #00f', zIndex: 1
+                                }}>
+                                    <input type='file'
+                                           style={{display: 'none'}}
+                                           id={`changeFile${boardFile.boardFileNo}`}
+                                           onChange={(e) => changeBoardFile(e, boardFile.boardFileNo)}
+                                    ></input>
+                                    <img style={{
+                                        width: '100%', height: '100%', zIndex: 'none',
                                         cursor: 'pointer'
-                                    }} 
-                                    className='fileImg' 
-                                    id={`img${boardFile.boardFileNo}`} 
-                                    src={
-                                        `https://kr.object.ncloudstorage.com/bitcamp-bucket-45/${boardFile.boardFilePath}${boardFile.boardFileName}`
-                                    }
-                                    onClick={() => openChangeFileInput(boardFile.boardFileNo)}
-                                    alr="미리보기"
-                                ></img>
-                                <input type='button' className='btnDel' value='x'
-                                       style={{width: '30px', height: '30px', position: 'absolute',
-                                            bottom: '0px', right: '0px', zIndex: 999, 
-                                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                            color: "#f00"
-                                        }} onClick={(e) => deleteImg(e, boardFile.boardFileNo)}></input>
-                                <p style={{display: 'inline-block', fontSize: '8px', cursor: 'pointer'}}
-                                    id={`fileName${boardFile.boardFileNo}`}>
-                                    {boardFile.boardFileOrigin}
-                                </p>
-                            </div>
-                        ))}
-                    </Container>
+                                    }} className='fileImg' id={`img${boardFile.boardFileNo}`}
+                                         src={`https://kr.object.ncloudstorage.com/bitcamp-bucket-45/${boardFile.boardFilePath}${boardFile.boardFileName}`}
+                                         onClick={() => openChangeFileInput(boardFile.boardFileNo)}></img>
+                                    <input type='button' className='btnDel' value='x'
+                                           style={{width: '30px', height: '30px', position: 'absolute',
+                                               bottom: '0px', right: '0px', zIndex: 999,
+                                               backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                               color: "#f00"
+                                           }} onClick={(e) => deleteImg(e, boardFile.boardFileNo)}></input>
+                                    <p style={{display: 'inline-block', fontSize: '8px', cursor: 'pointer'}}
+                                       id={`fileName${boardFile.boardFileNo}`}>
+                                        {boardFile.boardFileOrigin}
+                                    </p>
+                                </div>
+                            ))}
+                        </Container>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Grid container style={{marginTop: '3%', textAlign: 'center'}}>
-                <Grid item xs={12} 
-                    style={
-                        board != null && loginUserId === board.boardWriter 
-                        ? {display: 'block'}
-                        : {display: 'none'}
-                    }>
-                    <Button type='submit' variant='contained'>수정</Button>
-                    <Button type='button' variant='contained' style={{marginLeft: '2%'}}
-                            onClick={() => remove(board.boardNo)}
-                    >삭제</Button>
+                <Grid container style={{marginTop: '3%', textAlign: 'center'}}>
+                    <Grid item xs={12}
+                          style={
+                              board != null && loginUserId === board.boardWriter
+                                  ? {display: 'block'}
+                                  : {display: 'none'}
+                          }>
+                        <Button type='submit' variant='contained'>수정</Button>
+                        <Button type='button' variant='contained' style={{marginLeft: '2%'}} onClick={() => remove(board.boardNo)}>삭제</Button>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </form>
-    </Container>
-  );
+            </form>
+        </Container>
+    );
 }
 
 export default Board;
