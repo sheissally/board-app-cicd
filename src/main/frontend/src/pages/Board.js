@@ -290,7 +290,7 @@ const Board = () => {
         sendFormData.append("originFiles", JSON.stringify(originFiles));
 
         modify(sendFormData);
-    }, [board, originFiles, changeFiles, uploadFiles, modify()]);
+    }, [board, originFiles, changeFiles, uploadFiles, modify]);
 
     const remove = useCallback((boardNo) => {
         dispatch(removeBoard(boardNo));
